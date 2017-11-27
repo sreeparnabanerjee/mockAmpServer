@@ -6,7 +6,7 @@ module.exports = function(app) {
 
     var options = {
       "burst": 10,
-      "rate": "1/4s",
+      "rate": "1/1min",
       "on_allowed": amp.sendPossitive,
       "on_throttled": amp.sendRequestThrottled
     }

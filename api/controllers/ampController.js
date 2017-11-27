@@ -1,8 +1,25 @@
 var jstoxml = require('jstoxml');
 var moment = require('moment');
+
+var headers = function() {
+  var headers = {};
+  headers.maxQuota = '',
+  headers.remQuota = '',
+  headers.resetQuota = '';
+  return headers;
+}
+
 exports.sendPossitive = function(req, res, next, bucket) {
+
+  var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
+  var resultDate = new Date();
+  var reset = moment(resultDate).add(1, 'minute').format(dateFormat);
+
+  headers.maxQuota = 10;
+  headers.remQuota = bucket.tokens;
+  headers.resetQuota = reset;
+  
   var action = req.body.Action;
-  console.log(action);
   if(action === "GetFeedSubmissionList")
      getFeedSubmissionList(req, res, next, bucket);
      else
@@ -11,12 +28,10 @@ exports.sendPossitive = function(req, res, next, bucket) {
   };
 
   var getFeedSubmissionList = function(req, res, next, bucket) {
-    var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
-    var resultDate = new Date();
-    var reset = moment(resultDate).add(4, 'seconds').format(dateFormat);
-    res.set("x-mws-quota-max", 5);
-    res.set("x-mws-quota-remaining", bucket.tokens);
-    res.set("x-mws-quota-resetsOn", reset); 
+    
+    res.set("x-mws-quota-max", headers.maxQuota);
+    res.set("x-mws-quota-remaining", headers.remQuota);
+    res.set("x-mws-quota-resetsOn", headers.resetQuota); 
       res.setHeader('Content-Type', 'text/xml');
       res.send(jstoxml.toXML({
         GetFeedSubmissionListResponse: {
@@ -180,12 +195,10 @@ exports.sendPossitive = function(req, res, next, bucket) {
                     };
 
                     exports.sendRequestThrottled = function(req, res, next, bucket) {
-                      var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
-                      var resultDate = new Date();
-                      var reset = moment(resultDate).add(4, 'seconds').format(dateFormat);
-                      res.set("x-mws-quota-max", 5);
-                      res.set("x-mws-quota-remaining", 0);
-                      res.set("x-mws-quota-resetsOn", reset);
+                      headers.remQuota = bucket.tokens;
+                      res.set("x-mws-quota-max", headers.maxQuota);
+                      res.set("x-mws-quota-remaining", headers.remQuota);
+                      res.set("x-mws-quota-resetsOn", headers.resetQuota);
                       res.setHeader('Content-Type', 'text/xml');
                       res.status(503).send(jstoxml.toXML({
                         ErrorResponse: {
