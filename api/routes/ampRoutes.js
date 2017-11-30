@@ -4,31 +4,29 @@ module.exports = function(app) {
 
     var amp = require('../controllers/ampController');
 
-    var options = {
-      "burst": 10,
-      "rate": "1/1min",
-      "on_allowed": amp.sendPossitive,
-      "on_throttled": amp.sendRequestThrottled
-    }
+    app.post('/', amp.sendAccessDenied);
+
+    app.post('/getFeedSubmissionList', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionList,"on_throttled": amp.sendRequestThrottled}));
+
+    app.post('/submitFeed', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.submitFeed, "on_throttled": amp.sendRequestThrottled}));
+
+    app.post('/getFeedSubmissionResult', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionResult, "on_throttled": amp.sendRequestThrottled}));
     
-    // amp Routes
-    app.route('/').post(throttle(options));
+    app.post('/sendRequestThrottled', amp.sendRequestThrottled);
 
-    app.route('/sendRequestThrottled').post(amp.sendRequestThrottled);
+    app.post('/sendQuotaExceeded', amp.sendQuotaExceeded);
 
-    app.route('/sendQuotaExceeded').post(amp.sendQuotaExceeded);
+    app.post('/sendAccessDenied', amp.sendAccessDenied);
 
-    app.route('/sendAccessDenied').post(amp.sendAccessDenied);
+    app.post('/sendInputStreamDisconnected', amp.sendInputStreamDisconnected);
 
-    app.route('/sendInputStreamDisconnected').post(amp.sendInputStreamDisconnected);
+    app.post('/sendInternalError', amp.sendInternalError);
 
-    app.route('/sendInternalError').post(amp.sendInternalError);
+    app.post('/sendInvalidAccessKeyId', amp.sendInvalidAccessKeyId);
 
-    app.route('/sendInvalidAccessKeyId').post(amp.sendInvalidAccessKeyId);
+    app.post('/sendInvalidAddress', amp.sendInvalidAddress);
 
-    app.route('/sendInvalidAddress').post(amp.sendInvalidAddress);
+    app.post('/sendInvalidParameterValue', amp.sendInvalidParameterValue);
 
-    app.route('/sendInvalidParameterValue').post(amp.sendInvalidParameterValue);
-
-    app.route('/sendSignatureDoesNotMatch').post(amp.sendSignatureDoesNotMatch);
+    app.post('/sendSignatureDoesNotMatch', amp.sendSignatureDoesNotMatch);
 }
