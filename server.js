@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var port = process.env.PORT || 8081;
 
-var routes = require('./api/routes/ampRoutes'); //importing route
+var routes = require('./lib/routes/ampRoutes'); //importing route
 routes(app); //register the route
 
 app.listen(port);
