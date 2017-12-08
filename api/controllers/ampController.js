@@ -1,3 +1,4 @@
+'use strict';
 var jstoxml = require('jstoxml');
 var moment = require('moment');
 var uuid = require('uuid/v4');
@@ -5,7 +6,7 @@ var crypto = require('crypto');
 var fs = require('fs');
 
 exports.getFeedSubmissionList = function (req, res, next, bucket) {
-
+  debug(req.method + ' ' + req.url);
   var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
   var resultDate = new Date();
   var reset = moment(resultDate).add(1, 'minute').format(dateFormat);
@@ -40,7 +41,7 @@ exports.getFeedSubmissionList = function (req, res, next, bucket) {
 };
 
 exports.submitFeed = function (req, res, next, bucket) {
-
+  console.log(req.method + ' ' + req.url);
   var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
   var resultDate = new Date();
   var reset = moment(resultDate).add(1, 'minute').format(dateFormat);
@@ -74,7 +75,7 @@ exports.submitFeed = function (req, res, next, bucket) {
 };
 
 exports.getFeedSubmissionResult = function (req, res, next, bucket) {
-
+  console.log(req.method + ' ' + req.url);
   var dateFormat = 'ddd, DD MMM YYYY HH:mm:ss [GMT]';
   var resultDate = new Date();
   var reset = moment(resultDate).add(1, 'minute').format(dateFormat);
@@ -92,6 +93,7 @@ exports.getFeedSubmissionResult = function (req, res, next, bucket) {
 };
 
 exports.sendInvalidParameterValue = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(400).send(jstoxml.toXML({
     ErrorResponse: {
@@ -109,6 +111,7 @@ exports.sendInvalidParameterValue = function (req, res) {
 };
 
 exports.sendInputStreamDisconnected = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(400).send(jstoxml.toXML({
     ErrorResponse: {
@@ -126,6 +129,7 @@ exports.sendInputStreamDisconnected = function (req, res) {
 };
 
 exports.sendAccessDenied = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(401).send(jstoxml.toXML({
     ErrorResponse: {
@@ -143,6 +147,7 @@ exports.sendAccessDenied = function (req, res) {
 };
 
 exports.sendInvalidAccessKeyId = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(403).send(jstoxml.toXML({
     ErrorResponse: {
@@ -160,6 +165,7 @@ exports.sendInvalidAccessKeyId = function (req, res) {
 };
 
 exports.sendSignatureDoesNotMatch = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(403).send(jstoxml.toXML({
     ErrorResponse: {
@@ -177,6 +183,7 @@ exports.sendSignatureDoesNotMatch = function (req, res) {
 };
 
 exports.sendInvalidAddress = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(404).send(jstoxml.toXML({
     ErrorResponse: {
@@ -194,6 +201,7 @@ exports.sendInvalidAddress = function (req, res) {
 };
 
 exports.sendInternalError = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(500).send(jstoxml.toXML({
     ErrorResponse: {
@@ -211,6 +219,7 @@ exports.sendInternalError = function (req, res) {
 };
 
 exports.sendQuotaExceeded = function (req, res) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(503).send(jstoxml.toXML({
     ErrorResponse: {
@@ -228,6 +237,7 @@ exports.sendQuotaExceeded = function (req, res) {
 };
 
 exports.sendRequestThrottled = function (req, res, next, bucket) {
+  console.log(req.method + ' ' + req.url);
   res.setHeader('Content-Type', 'text/xml');
   res.status(503).send(jstoxml.toXML({
     ErrorResponse: {

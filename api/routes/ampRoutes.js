@@ -1,17 +1,16 @@
 'use strict';
 var throttle = require("express-throttle");
-module.exports = function(app) {
+var amp = require('../controllers/ampController');
 
-    var amp = require('../controllers/ampController');
-
+module.exports = function (app) {
     app.post('/', amp.sendAccessDenied);
 
-    app.post('/getFeedSubmissionList', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionList,"on_throttled": amp.sendRequestThrottled}));
+    app.post('/getFeedSubmissionList', throttle({ "burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionList, "on_throttled": amp.sendRequestThrottled }));
 
-    app.post('/submitFeed', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.submitFeed, "on_throttled": amp.sendRequestThrottled}));
+    app.post('/submitFeed', throttle({ "burst": 10, "rate": "1/1min", "on_allowed": amp.submitFeed, "on_throttled": amp.sendRequestThrottled }));
 
-    app.post('/getFeedSubmissionResult', throttle({"burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionResult, "on_throttled": amp.sendRequestThrottled}));
-    
+    app.post('/getFeedSubmissionResult', throttle({ "burst": 10, "rate": "1/1min", "on_allowed": amp.getFeedSubmissionResult, "on_throttled": amp.sendRequestThrottled }));
+
     app.post('/sendRequestThrottled', amp.sendRequestThrottled);
 
     app.post('/sendQuotaExceeded', amp.sendQuotaExceeded);
